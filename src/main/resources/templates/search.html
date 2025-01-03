@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible"
+          content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kursovik</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
+    <script src="https://use.fontawesome.com/7328c42f01.js"></script>
+    <script th:src="@{Controllers/Search.js}"></script>
+    <!--<script type="text/javascript" src="../static/dist/resources/app.js"></script>-->
+
+    <link rel="stylesheet" type="text/css" th:href="@{/main.css}"/>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body ng-app="Search" ng-controller="SearchController">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container mr-0">
+            <a class="navbar-brand" href="#">
+                <img src="Images/caduceus-2730780_1280.png" width="85" alt="">
+                <br>Афродита
+            </a>
+
+            <div class="navbar" id="navbarResponsive">
+                <ul class="navbar-nav mr-5">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home">Главное меню</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="privateAccount">Личный кабинет</a>
+                    </li>
+                    <!--<li class="nav-item ng-hide" ng-show="ur == 'MANAGER'">
+                        <a class="nav-link" href="orders">Заказы</a>
+                    </li>-->
+                    <li class="nav-item ng-hide" ng-show="ur == 'USER'">
+                        <a class="nav-link" href="search">Поиск</a>
+                    </li>
+                    <li class="nav-item ng-hide" ng-show="ur == 'MANAGER'">
+                        <a class="nav-link" href="search">Товары</a>
+                    </li>
+                    <li class="nav-item ng-hide" ng-show="ur == 'MANAGER'">
+                        <a class="nav-link" href="medicine">Добавить позицию</a>
+                    </li>
+                    <li class="nav-item ng-hide" ng-show="ur == 'USER'" >
+                        <a class="nav-link" href="basket">
+                            Корзина
+                            <span class="badge badge-light">{{currentOrder.length}}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ng-hide" ng-show="ur == 'USER'">
+                        <a class="nav-link" href="help">Справка</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fa fa-sign-out"></i>
+                            Выйти
+                        </a>
+                    </li>
+                </ul>
+                <!--<form class="form-inline mx-3">
+                    <input class="form-control mr-sm-1" type="search" placeholder="введите название лекарства" aria-label="Search">
+                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Найти</button>
+                </form>-->
+            </div>
+        </div>
+    </nav>
+
+    <div>
+        <div class="my-3 col-md-10 card bg-light mx-auto">
+            <div class="font-weight-bold h4 text-center my-2 ng-hide" ng-show="ur == 'USER'"> Поиск </div>
+            <div class="font-weight-bold h4 text-center my-2 ng-hide" ng-show="ur == 'MANAGER'"> Товары </div>
+
+            <form class="simple-form" name="medicine">
+                <div class="row my-3 pl-5">
+                    <div class="col-md-4 text-center ml-5 pl-3">
+                        <label for="MedicineName">Наименование</label>
+                        <input type="text"
+                               class="form-control"
+                               name="name"
+                               ng-model="name"
+                               id="MedicineName"
+                               placeholder="введите название лекарства"
+                               required>
+                    </div>
+                    <div class="col-md-4 text-center ml-3">
+                        <label for="MedicineGroup">Группа</label>
+                        <select class="custom-select form-control"
+                                name="group"
+                                ng-model="group"
+                                id="MedicineGroup">
+                            <option value="{{item.id}}" ng-repeat="item in groups">{{item.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mx-auto mt-4 pt-2">
+                        <!--<a class="btn text-info" href="/home">
+                            В главное меню
+                        </a>-->
+                        <a class="btn btn-info px-4 text-white"
+                           ng-click="findMedicines()">
+                            Найти
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="my-3 card col-md-10 mx-auto">
+        <div class="font-weight-bold h4 text-center mt-4">
+            Найдено лекарств: {{medicines.length}}
+        </div>
+
+        <table class="my-3" ng-if="medicines.length">
+            <tr>
+                <th></th>
+                <th class="text-center">Название</th>
+                <th class="text-center">Количество</th>
+                <th class="text-center">Цена</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="medicine in medicines | orderBy:'id'" class="border-top">
+                <td width="200" class="text-center">
+                    <img src="Images/{{medicine.img}}" width="80" alt="Изображение лекарства появится в ближайшее время">
+                </td>
+                <td class="text-center">{{medicine.name}}</td>
+                <td class="text-center">{{medicine.quantity}} шт.</td>
+                <td class="text-center">{{medicine.price}} руб.</td>
+                <td class="text-center">
+                    <a class="btn btn-info text-white"
+                       ng-if="medicine.quantity"
+                       type="button"
+                       data-toggle="modal" data-target="#successModal"
+                       ng-click="addToBasket(medicine.id)"
+                       ng-show="ur == 'USER'">
+                        Добавить в корзину
+                    </a>
+                    <a class="btn btn-info text-white"
+                       ng-if="medicine.quantity"
+                       type="button"
+                       href="/{{medicine.id}}"
+                       ng-show="ur == 'MANAGER'">
+                        Редактировать
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Заголовок модального окна -->
+                <div class="modal-header">
+                    <h4 class="modal-title" id="successModalLabel">Добавление товара в корзину</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body alert alert-success hidden m-0 text-center" id="success-alert">
+                    Выбранный товар успешно добавлен в корзину!
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" href="/basket" ng-click="">Перейти в корзину</a>
+                    <button class="btn btn-primary" data-dismiss="modal" type="button">Продолжить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-3 bg-dark">
+        <div class="my-2 pt-3 text-white text-center text-small">
+            <p class="mb-1">© ИТМО Назарова</p>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="home">Главное меню</a></li>
+                <li class="list-inline-item"><a href="privateAccount">Личный кабинет</a></li>
+                <!--<li class="list-inline-item ng-hide" ng-show="ur == 'MANAGER'"><a href="orders">Заказы</a></li>-->
+                <li class="list-inline-item ng-hide" ng-show="ur == 'USER'"><a href="search">Поиск</a></li>
+                <li class="list-inline-item ng-hide" ng-show="ur == 'MANAGER'"><a href="search">Товары</a></li>
+                <li class="list-inline-item ng-hide" ng-show="ur == 'MANAGER'"><a href="medicine">Добавить позицию</a></li>
+                <li class="list-inline-item ng-hide" ng-show="ur == 'USER'"><a href="basket">Корзина</a></li>
+                <li class="list-inline-item ng-hide" ng-show="ur == 'USER'"><a href="help">Справка</a></li>
+                <li class="list-inline-item"><a href="logout">Выйти</a></li>
+            </ul>
+        </div>
+    </footer>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>

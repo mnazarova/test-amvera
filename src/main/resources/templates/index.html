@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible"
+          content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kursovik</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
+    <script th:src="@{Controllers/app.js}"></script>
+    <!--<script type="text/javascript" src="../static/dist/resources/app.js"></script>-->
+
+    <link th:href="@{/main.css}" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body ng-app="app" ng-controller="AppController">
+    <!--<#include "home.html">
+    <div class="container">
+    <msg-show></msg-show>
+    </div>-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container mr-0">
+            <a class="navbar-brand" href="#">
+                <img src="Images/caduceus-2730780_1280.png" width="85" alt="">
+                <br>Афродита
+            </a>
+
+
+            <div class="navbar" id="navbarResponsive">
+                <ul class="navbar-nav mr-5">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Выйти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="home">Главное меню</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="privateAccount">Личный кабинет</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="search">Поиск</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="basket">Корзина</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="help">Справка</a>
+                    </li>
+                </ul>
+                <form class="form-inline mx-3">
+                    <input class="form-control mr-sm-1" type="search" placeholder="введите название лекарства" aria-label="Search">
+                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Найти</button>
+                </form>
+                <!--<div class="nav-item ml-5">
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit">
+                            <i class="fa fa-sign-out"></i>
+                            Выйти
+                        </button>
+                    </form>
+                </div>-->
+            </div>
+        </div>
+    </nav>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container mr-0">
+            <a class="navbar-brand" href="#">
+                <!--<img src="Images/caduceus-2730780_1280.png" width="85" alt="">-->
+                <br>Афродита
+            </a>
+
+
+            <div class="navbar" id="navbarResponsive">
+                <ul class="navbar-nav mx-5">
+                    <li class="nav-item">
+                        <a class="nav-link" href="registration">Зарегистрироваться</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="privateAccount">Личный кабинет</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="search">Поиск</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="basket">Корзина</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="help">Справка</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0 ml-md-5">
+                    <input class="form-control mr-sm-1" type="search" placeholder="введите название лекарства" aria-label="Search">
+                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Найти</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" ui-sref="home">Афродита</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" ui-sref="login">Войти</a>
+                <a class="nav-item nav-link" ui-sref="registration">Зарегистрироваться</a>
+                <a class="nav-item nav-link" ui-sref="privateAccount">Личный кабинет</a>
+                <a class="nav-item nav-link" ui-sref="search">Поиск</a>
+                <a class="nav-item nav-link" ui-sref="basket">Корзина</a>
+                <a class="nav-item nav-link" ui-sref="help">Справка</a>
+            </div>
+        </div>
+
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+
+
+
+    </div>
+
+
+    <div>
+        <div class="my-5 card bg-light col-md-5 mx-auto">
+
+            <div th:if="${param.error}">
+                Invalid username and password.
+            </div>
+            <div th:if="${param.logout}">
+                You have been logged out.
+            </div>
+
+            <div class="font-weight-bold h4 text-center my-3">
+                Авторизация
+            </div>
+
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <label for="labelName">Логин</label>
+                    <input type="text"
+                           class="form-control"
+                           ng-model="auth.login"
+                           name="username"
+                           id="labelName"
+                           placeholder="введите логин"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="labelPassword">Пароль</label>
+                    <input type="password"
+                           class="form-control"
+                           ng-model="auth.password"
+                           name="password"
+                           id="labelPassword"
+                           placeholder="введите пароль"
+                           required>
+                </div>
+                <!--<div class="form-group text-right">
+                    <a class="btn text-info" href="registration">
+                        Зарегистрироваться
+                    </a>
+                    <button class="btn btn-info px-4" ng-disabled="login.invalid || password.invalid">
+                        Войти
+                    </button>
+                </div>-->
+                <div><input type="submit" href="help" value="Sign In"/></div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <!--<div ui-view></div>
+
+    <div ng-controller="APPController">
+        <p>123</p>
+    </div>-->
+
+    <footer class="py-3 bg-dark">
+        <div class="my-2 pt-3 text-white text-center text-small">
+            <p class="mb-1">© ИТМО Назарова</p>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="home">Главное меню</a></li>
+                <li class="list-inline-item"><a href="login">Войти</a></li>
+                <li class="list-inline-item"><a href="registration">Зарегистрироваться</a></li>
+                <li class="list-inline-item"><a href="privateAccount">Личный кабинет</a></li>
+                <li class="list-inline-item"><a href="search">Поиск</a></li>
+                <li class="list-inline-item"><a href="basket">Корзина</a></li>
+                <li class="list-inline-item"><a href="help">Справка</a></li>
+            </ul>
+        </div>
+    </footer>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container mr-0">
+            <a class="navbar-brand" href="#">
+                <img src="Images/caduceus-2730780_1280.png" width="85" alt="">
+                <br>Афродита
+            </a>
+        </div>
+    </nav>
+    <div class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" ui-sref="home">Афродита</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" ui-sref="login">Войти</a>
+                <a class="nav-item nav-link" ui-sref="registration">Зарегистрироваться</a>
+                <a class="nav-item nav-link" ui-sref="privateAccount">Личный кабинет</a>
+                <a class="nav-item nav-link" ui-sref="search">Поиск</a>
+                <a class="nav-item nav-link" ui-sref="basket">Корзина</a>
+                <a class="nav-item nav-link" ui-sref="help">Справка</a>
+            </div>
+        </div>
+
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+
+
+
+    </div>
+
+    <img src="Images/ind.png" width="" alt="">
+    <a class="btn btn-outline-info my-2 my-sm-0" href="login">Войти на сайт</a>
+
+    <footer class="py-3 bg-dark">
+        <div class="my-2 pt-3 text-white text-center text-small">
+            <p class="mb-1">© ИТМО Назарова</p>
+            <ul class="list-inline"></ul>
+        </div>
+    </footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
